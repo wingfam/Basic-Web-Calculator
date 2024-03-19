@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+
+* , html, body, p {
+    box-sizing: border-box;
+    font-family: 'Noto Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin-top: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* calculator */
+.calculator {
+    display: grid;
+    overflow: hidden;
+    max-inline-size: 30rem;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.calculator-output {
+    padding: 1rem;
+    font-size: 2rem;;
+    text-align: end;
+    background: grey;
+    color: whitesmoke;
+}
+
+.calculator-input-container {
+    height: 25rem;
+    width: 25rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* btn */
+.btn {
+    font-size: 2rem;
+    font-weight: bolder;
+    border: 0.3px solid cadetblue;
+    color: white;
+    background-color: #223850;
+}
+
+.btn-operator {
+    color: chartreuse;
+}
+
+.btn-num:hover,
+.btn-operator:hover {
+    background-color: cadetblue;
+}
+
+.clear {
+    color: red;
+}
+
+.dot {
+    grid-column: span 2;
+}
+
+.equal {
+    grid-row: span 2;
+    background-color: green;
+    color: white;
+}
+
