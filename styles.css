@@ -19,12 +19,13 @@ body {
     display: grid;
     overflow: hidden;
     max-inline-size: 30rem;
+    border-radius: 15px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .calculator-output {
     padding: 1rem;
-    font-size: 2rem;;
+    font-size: 2.5rem;;
     text-align: end;
     background: grey;
     color: whitesmoke;
