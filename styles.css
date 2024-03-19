@@ -51,22 +51,20 @@ body {
     color: chartreuse;
 }
 
-.btn-num:hover,
-.btn-operator:hover {
-    background-color: cadetblue;
-}
-
-.clear {
+.btn-clear {
     color: red;
 }
 
-.dot {
+.zero {
     grid-column: span 2;
 }
 
-.equal {
+.btn-equal {
     grid-row: span 2;
     background-color: green;
     color: white;
 }
 
+.btn:hover {
+    background-color: cadetblue;
+}
