@@ -3,6 +3,9 @@
     Update calculator display arcordingly
     Store the first number, operator and second number in their own variable
 */
+const firstNum = 0;
+const operator = "";
+const secondNum = 0;
 
 const add = function(num1, num2) {
 	return num1 + num2;
