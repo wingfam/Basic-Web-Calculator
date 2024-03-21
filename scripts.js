@@ -4,54 +4,12 @@ let finalResult = null;
 let firstOp = null;
 let secondOp = null;
 
-const entryDiv = document.getElementById("calc-entry");
+const entryInput = document.getElementById("calc-entry");
 const resultDiv = document.getElementById("result-num");
-
-const setEventListener = function () {
-    const buttons = document.querySelectorAll(".btn");
-
-    for (let button of buttons) {
-        button.addEventListener("click", function (e) {
-            if (this.className.includes("btn-num")) {
-                if (entryDiv.textContent.substring(0, 1).includes("0")) entryDiv.textContent = entryDiv.textContent.replace("0", "");
-
-                entryDiv.textContent = entryDiv.textContent.concat("", e.currentTarget.value);
-
-                if (entryDiv.textContent.length > 10) entryDiv.textContent = entryDiv.textContent.substring(0, 10);
-            } else if (this.className.includes("btn-dot")) {
-                if (entryDiv.textContent.includes(".")) return;
-                else entryDiv.textContent = entryDiv.textContent.concat("", e.currentTarget.value);
-            } else if (this.className.includes("btn-operator")) {
-                let currentOp = e.currentTarget.value;
-
-                // Here I deduced that there are two circumstances to use if else like this:
-                // - First, new calculation from the start. 1st operator and 2nd operator haven't entered yet.
-                // - Second, a calculation has already took place, and every calculation after that.
-                if (!firstOp && !secondOp) {
-                    firstOp = currentOp;
-                    firstNum = parseFloat(entryDiv.textContent);
-                    resultDiv.textContent = entryDiv.textContent.concat(" ", currentOp);
-                } else if (firstOp && !secondOp) {
-                    secondOp = currentOp;
-                    secondNum = parseFloat(entryDiv.textContent);
-                }
-
-                entryDiv.textContent = entryDiv.textContent
-                    .replaceAll(/[0-9]/g, "0")
-                    .substring(0, 1);
-
-                operate("btn-operator");
-            } else if (this.className.includes("btn-equal")) operate("btn-equal");
-            else if (this.className.includes("btn-all-clear")) clearAll();
-            else if (this.className.includes("btn-clear-entry")) clearEntry(false);
-        });
-    }
-};
 
 const operate = function (btnType) {
     if (btnType.includes("equal")) {
-        if (firstNum && firstOp && !secondNum)
-            secondNum = parseFloat(entryDiv.textContent);
+        if (firstNum && firstOp && !secondNum) secondNum = parseFloat(entryInput.value);
     }
 
     if (secondNum === 0 && firstOp === "/") {
@@ -78,7 +36,7 @@ const operate = function (btnType) {
         }
 
         resultDiv.textContent = finalResult.toString().concat(" ", secondOp);
-        entryDiv.textContent = entryDiv.textContent
+        entryInput.value = entryInput.value
             .replaceAll(/[0-9]/g, "0")
             .substring(0, 1);
 
@@ -94,19 +52,66 @@ const operate = function (btnType) {
 };
 
 const clearEntry = function (isClearAll) {
-    entryDiv.textContent = entryDiv.textContent
-        .replaceAll(/[0-9]/g, "0")
-        .substring(0, 1);
+    entryInput.value = entryInput.value.replaceAll(/[0-9]/g, "").substring(0, 1);
     if (isClearAll) resultDiv.textContent = parseInt(resultDiv.textContent) * 0;
 };
 
 const clearAll = function () {
-    firstNum = 0;
-    secondNum = 0;
-    finalResult = 0;
-    firstOp = "";
-    secondOp = "";
+    firstNum = null;
+    secondNum = null;
+    finalResult = null;
+    firstOp = null;
+    secondOp = null;
     clearEntry(true);
+};
+
+const setEventListener = function () {
+    const buttons = document.querySelectorAll(".btn");
+
+    window.addEventListener("load", (event) => {
+        entryInput.value = "";
+    });
+
+    entryInput.addEventListener("click", function(e) {
+        e.preventDefault();
+    });
+
+    for (let button of buttons) {
+        button.addEventListener("click", function (e) {
+            if (this.className.includes("btn-num")) {
+                entryInput.value = entryInput.value.concat("", e.currentTarget.value);
+
+                if (entryInput.value.length > 10) entryInput.value = entryInput.value.substring(0, 10);
+            } else if (this.className.includes("btn-dot")) {
+                if (entryInput.value.includes(".")) return;
+                else entryInput.value = entryInput.value.concat("", e.currentTarget.value);
+            } else if (this.className.includes("btn-operator")) {
+                let currentOp = e.currentTarget.value;
+
+                // If entry doesn't have number, stop from calculation
+                if (!entryInput.value) {
+                    return;
+                }
+                
+                // - First, new calculation from the start. 1st operator and 2nd operator haven't entered yet.
+                // - Second, a calculation has already took place, and every calculation after that.
+                if (!firstOp && !secondOp) {
+                    firstOp = currentOp;
+                    firstNum = parseFloat(entryInput.value);
+                    resultDiv.textContent = entryInput.value.concat(" ", currentOp);
+                } else if (firstOp && !secondOp) {
+                    secondOp = currentOp;
+                    secondNum = parseFloat(entryInput.value);
+                }
+
+                clearEntry();
+                operate("btn-operator");
+            } 
+            else if (this.className.includes("btn-equal")) operate("btn-equal");
+            else if (this.className.includes("btn-all-clear")) clearAll();
+            else if (this.className.includes("btn-clear-entry")) clearEntry(false);
+        });
+    }
 };
 
 setEventListener();
