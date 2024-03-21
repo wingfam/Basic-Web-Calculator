@@ -36,6 +36,9 @@ const operate = function (btnType) {
         }
 
         clearEntry();
+
+        finalResult = Math.round((finalResult + Number.EPSILON) * 100) / 100
+
         resultDiv.textContent = finalResult.toString().concat(" ", secondOp);
 
         // Shift each variable with new value so new calculation can take place.
