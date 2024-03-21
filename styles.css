@@ -33,7 +33,7 @@ body {
     color: whitesmoke;
 }
 
-#calc-output {
+#calc-entry {
     padding: 1rem;
     font-size: 3.5rem;
     text-align: end;
@@ -61,7 +61,7 @@ body {
     color: chartreuse;
 }
 
-.btn-clear {
+.btn-all-clear {
     color: red;
 }
 
