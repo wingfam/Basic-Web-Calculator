@@ -2,82 +2,16 @@
     
 */
 
-let firstNum = null;
-let secondNum = null;
+let firstNum = 0;
+let secondNum = 0;
+let finalResult = 0;
 let firstOp = "";
 let secondOp = "";
-let finalResult = null;
 
 const outputDiv = document.getElementById("calc-output");
 const resultDiv = document.getElementById("result-num");
 
-const operate = function(firstNum, operator, secondNum) {
-    switch (operator) {
-        case "+":
-            return firstNum + secondNum;
-        case "-":
-            return firstNum - secondNum;
-        case "x":
-            return firstNum * secondNum;
-        case "/":
-            return firstNum / secondNum;
-        default:
-            break;
-    }
-}
-
-const updateMainOutput = function(num) {
-    outputDiv.textContent = parseInt(outputDiv.textContent.concat("", num));
-    if (outputDiv.textContent.length > 15) {
-        outputDiv.textContent = outputDiv.textContent.substring(0, 15)
-    }
-}
-
-const enterOperator = function(currentOp) {
-    // Need to check for the second operator
-    // When user enter second operator: 
-    // - Set current number on display to secondNum
-    // - Do operate with firstNum, secondNum and firstOperator
-    // - Update tempOutput to final result
-    // - Update firstNum = finalResult, firstOperator = secondOperator
-    // - Set secondNum = null, secondOperator = null, finalResult = null;
-    if (!firstOp && !secondOp) {
-        firstOp = currentOp;
-        firstNum = parseInt(outputDiv.textContent);
-        resultDiv.textContent = outputDiv.textContent.concat(" ", currentOp);
-    } else {
-        secondNum = parseInt(outputDiv.textContent);
-        secondOp = currentOp;
-    }
-
-    if (firstOp && secondOp) {
-        if (firstNum === 0 && firstOp === "/") {
-            resultDiv.textContent = "Oops, can't do that!"
-        } else {
-            finalResult = operate(firstNum, firstOp, secondNum);
-            resultDiv.textContent = finalResult.toString().concat(" ", secondOp);
-        }
-        
-        updateVar();
-    }
-
-    clearDisplay();
-}
-
-const updateVar = function() {
-    firstNum = finalResult;
-    firstOp = secondOp;
-    secondNum = null;
-    secondOp = null;
-    finalResult = null;
-}
-
-const clearDisplay = function() {
-    outputDiv.textContent = outputDiv.textContent.replaceAll(/[0-9]/g, "0")
-    outputDiv.textContent = outputDiv.textContent.substring(0, 1);
-}
-
-const main = function() {
+const setEventListener = function() {
     const buttons = document.querySelectorAll(".btn")
     
     for (let button of buttons) {
@@ -86,12 +20,75 @@ const main = function() {
             // console.log(e.currentTarget === this); // logs `true
             // console.log(e.currentTarget.value)
             if (this.className.includes("btn-num")) {
-                updateMainOutput(e.currentTarget.value)
+                outputDiv.textContent = parseFloat(outputDiv.textContent.concat("", e.currentTarget.value));
+                if (outputDiv.textContent.length > 15) {
+                    outputDiv.textContent = outputDiv.textContent.substring(0, 15)
+                }
             } else if (this.className.includes("btn-operator")) {
-                enterOperator(e.currentTarget.value);
+                let currentOp = e.currentTarget.value
+
+                if (!firstOp && !secondOp) {
+                    firstOp = currentOp;
+                    firstNum = parseFloat(outputDiv.textContent);
+                    resultDiv.textContent = outputDiv.textContent.concat(" ", currentOp);
+                } else if (firstOp && !secondOp) {
+                    secondOp = currentOp;
+                    secondNum = parseFloat(outputDiv.textContent);
+                }
+
+                clear();
+                operate("btn-operator");
+            } else if (this.className.includes("btn-equal")) {
+                operate("btn-equal");
             }
         });
     }
 }
 
-main();
+const operate = function(btnType) {
+    if (btnType.includes("equal")) {
+        // if (!firstNum && !firstOp && !secondNum) return
+        if (firstNum && firstOp && !secondNum) secondNum = parseFloat(outputDiv.textContent);
+    }
+
+    if (firstNum === 0 && firstOp === "/") {
+        resultDiv.textContent = "Oops, can't divide by 0!"
+        return;
+    }
+    
+    if (firstNum, firstOp, secondNum) {
+        switch (firstOp) {
+            case "+":
+                finalResult = firstNum + secondNum;
+                break;
+            case "-":
+                finalResult = firstNum - secondNum;
+                break;
+            case "x":
+                finalResult = firstNum * secondNum;
+                break;
+            case "/":
+                finalResult = firstNum / secondNum;
+                break;
+            default:
+                break;
+        }
+
+        resultDiv.textContent = finalResult.toString().concat(" ", secondOp);
+
+        firstNum = finalResult;
+        secondNum = 0;
+        finalResult = 0;
+        firstOp = secondOp;
+        secondOp = "";
+
+        clear();
+    }
+}
+
+const clear = function() {
+    outputDiv.textContent = outputDiv.textContent.replaceAll(/[0-9]/g, "0")
+    outputDiv.textContent = outputDiv.textContent.substring(0, 1);
+}
+
+setEventListener();
