@@ -35,10 +35,8 @@ const operate = function (btnType) {
                 break;
         }
 
+        clearEntry();
         resultDiv.textContent = finalResult.toString().concat(" ", secondOp);
-        entryInput.value = entryInput.value
-            .replaceAll(/[0-9]/g, "0")
-            .substring(0, 1);
 
         // Shift each variable with new value so new calculation can take place.
         firstNum = finalResult;
